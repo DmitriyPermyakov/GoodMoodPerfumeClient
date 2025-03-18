@@ -7,3 +7,8 @@ export interface Product {
    category: string,
    imageUrl: string
  }
+
+ export interface OrderItem {
+  productId: number,
+  quantity: number
+ }
