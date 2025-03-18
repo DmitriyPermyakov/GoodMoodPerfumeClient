@@ -1,6 +1,5 @@
 :host {
-   max-width: 50%;
-   min-width: 30%;
+   width: 50%   
 }
 
 .product-card {
@@ -18,6 +17,8 @@
 .product-image-container {
    display: block;
    max-width: 100%;
+
+   aspect-ratio: 1 / 1;
 }
 
 .product-card-image {
