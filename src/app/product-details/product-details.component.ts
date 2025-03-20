@@ -12,6 +12,7 @@ import { ActivatedRoute } from '@angular/router';
 export class ProductDetailsComponent implements OnInit, OnDestroy {
   public product: Product | null
   private productSubscription: Subscription
+  
   constructor(private productService: ProductService, private activatedRoute: ActivatedRoute) {}
 
   ngOnInit(): void {

@@ -1,16 +1,27 @@
+:root {
+   --border-color: #AA60C8;
+   --shadow-color: #aa60c887;
+}
+/* 
+html {
+   position: relative;
+   overflow-y: auto ;
+} */
+
 html,
 body {
    padding: 0;
    margin: 0;
    width: 100%;
+   height: 100vh;
    height: 100svh;
    box-sizing: border-box;
    font-size: 16px;
 
    font-family: sans-serif;
 }
-
-html {
+/* 
+body {
    overflow-y: scroll;
-   position: relative;
-}
+   overflow-x: hidden;
+} */

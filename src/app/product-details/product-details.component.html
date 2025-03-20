@@ -7,7 +7,7 @@
       <p class="price">{{ product.price | currency }}</p>
    </div>
    <p class="description">{{ product.description }}</p>
-   <button>
+   <button [routerLink]="['../../cart']">
       <svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
          <circle cx="17" cy="30" r="2" stroke="#A2A2A2" stroke-width="2" />
          <circle cx="25" cy="30" r="2" stroke="#A2A2A2" stroke-width="2" />

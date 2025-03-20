@@ -1,0 +1,47 @@
+<div class="container">
+   <div class="cart-item" *ngFor="let item of items">
+      <div class="item-image">
+         <img [src]="item.product.imageUrl" alt="">
+      </div>
+      <div class="name-icon">
+         <p class="name">{{ item.product.name }}</p>
+         <button class="icon" (click)="removeItem(item.product.id)">
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+               <path
+                  d="M11 15.0823L14.4498 37.1309C14.6021 38.1043 15.4405 38.8218 16.4258 38.8218H31.5747C32.5599 38.8218 33.3983 38.1043 33.5506 37.1309L37.0004 15.0823"
+                  stroke="#A2A2A2" stroke-width="2" stroke-linecap="round" />
+               <path d="M14.7148 10.4998H33.2866" stroke="#A2A2A2" stroke-width="2" stroke-linecap="round" />
+               <path d="M20.6895 15.6069L20.6895 31.514" stroke="#A2A2A2" stroke-width="2" stroke-linecap="round" />
+               <path d="M27.3105 15.6069L27.3105 31.514" stroke="#A2A2A2" stroke-width="2" stroke-linecap="round" />
+               <path d="M20.2861 8.17834H27.7148" stroke="#A2A2A2" stroke-width="2" stroke-linecap="round" />
+            </svg>
+
+         </button>
+      </div>
+      <div class="price-quantity">
+         <p class="price">{{ item.product.price | currency }} </p>
+         <div class="quantity">
+            <button class="decrease" (click)="decreaseCount(item.product.id)">
+               <svg width="26" height="2" viewBox="0 0 26 2" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M1 1H25" stroke="#A2A2A2" stroke-width="2" stroke-linecap="round" />
+               </svg>
+            </button>
+            <input type="number" max="100" min="1" [value]="item.quantity">
+            <button class="increase" (click)="increaseCount(item.product.id)">
+               <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <g filter="url(#filter0_d_241_81)">
+                     <path d="M14.6494 21.1375H35.3494" stroke="#A2A2A2" stroke-width="2" stroke-linecap="round" />
+                     <path d="M24.999 10.7874L24.999 31.4874" stroke="#A2A2A2" stroke-width="2"
+                        stroke-linecap="round" />
+                  </g>
+               </svg>
+
+            </button>
+         </div>
+      </div>
+   </div>
+   <div class="total">
+      <p class="total-label">Всего:</p>
+      <p class="total-count">{{ getTotalCount() | currency }}</p>
+   </div>
+</div>

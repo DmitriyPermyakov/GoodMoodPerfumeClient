@@ -9,6 +9,6 @@ export interface Product {
  }
 
  export interface OrderItem {
-  productId: number,
+  product: Product,
   quantity: number
  }
