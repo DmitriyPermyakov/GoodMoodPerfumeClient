@@ -53,26 +53,3 @@
    text-indent: 1.5em;
    height: 40%;
 }
-
-button {
-   border: none;
-    width: 65px;
-    aspect-ratio: 1 / 1;
-    border-radius: 3em;
-    background-color: var(--border-color);
-    position: absolute;
-    bottom: 20px;
-    right: 20px;
-}
-
-svg {
-   width: 35px;
-    height: 35px;
-    position: absolute;
-    top: 22%;
-    left: 21%;
-}
-
-svg * {
-   stroke: #edebeb;
-}

@@ -8,7 +8,30 @@ export interface Product {
    imageUrl: string
  }
 
- export interface OrderItem {
+export interface OrderItem {
   product: Product,
   quantity: number
- }
+}
+
+export interface OrderItemsRequest {
+  productId: number,
+  quantity: number
+}
+
+export interface OrderRequest {
+  queryId: string,
+  telegramUserId: number,
+  orderItems: OrderItemsRequest[]
+  address: string,
+  name: string,
+  phone: string,
+  delivery: string
+}
+
+export interface Response {
+  status: string,
+  isSuccessfull: boolean,
+  errors: string[],
+  result: object
+}
+

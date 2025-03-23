@@ -22,11 +22,9 @@
    padding: 1em 1.5em;
    flex: 1 1 100%;
 
-   border: none;
+   border: 1px solid var(--border-color);
    border-radius: 3em;
-   /* box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px; */
-
-   box-shadow: var(--shadow-color) 0px 3px 8px;
+   
    outline: none;
    
    max-width: 100%;
@@ -38,7 +36,7 @@
 
 .search input:active,
 .search input:focus {
-   box-shadow: var(--shadow-color) 0px 3px 8px;
+   outline: 2px solid var(--border-color);
 }
 
 .search-icon {
@@ -87,7 +85,6 @@
 .category.active {
    background-color: #AA60C8;
    color: #1b1b1bcc;
-   box-shadow: var(--shadow-color) 0px 3px 8px;
 }
 
 .category + .category {

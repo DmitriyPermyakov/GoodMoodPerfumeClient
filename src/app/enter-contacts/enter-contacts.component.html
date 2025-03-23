@@ -1,0 +1,14 @@
+<div class="contacts">
+   <form [formGroup]="contacts">
+      <div class="select">
+         <select class="inputs" formControlName="delivery" name="delivery" id="delivery">
+            <option value="CDEK">CDEK</option>
+            <option value="POST">Почта России</option>
+            <option value="COURIER">Доставка по Москве</option>
+         </select>
+      </div>
+      <input class="inputs" formControlName="name" type="text" placeholder="Имя Фамилия">
+      <input class="inputs" formControlName="phone" type="tel" placeholder="Телефон">
+      <textarea class="inputs" formControlName="address" type="text" placeholder="Адрес"></textarea>
+   </form>
+</div>

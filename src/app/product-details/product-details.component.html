@@ -7,7 +7,7 @@
       <p class="price">{{ product.price | currency }}</p>
    </div>
    <p class="description">{{ product.description }}</p>
-   <button [routerLink]="['../../cart']">
+   <button class="cart-button" [disabled]="isCartEmpty()" [routerLink]="['../../cart']">
       <svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
          <circle cx="17" cy="30" r="2" stroke="#A2A2A2" stroke-width="2" />
          <circle cx="25" cy="30" r="2" stroke="#A2A2A2" stroke-width="2" />
@@ -15,5 +15,6 @@
             d="M1 6L6.8612 7.61903C7.55401 7.8104 8.09085 8.35881 8.26741 9.05553L11.6722 22.4913C11.8971 23.3786 12.6956 24 13.6109 24H27.5109C28.3595 24 29.1158 23.4645 29.3975 22.664L32.0624 15.0926C32.5203 13.7916 31.555 12.4286 30.1758 12.4286H13"
             stroke="#A2A2A2" stroke-width="2" stroke-linecap="round" />
       </svg>
+      <span class="items-count" *ngIf="itemsCount() > 0">{{ itemsCount() }}</span>
    </button>
 </div>

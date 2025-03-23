@@ -21,9 +21,8 @@
    margin-bottom: 1em;
    padding: 1em;
 
-   border: none;
+   border: 1px solid var(--border-color);
    border-radius: 1em;
-   box-shadow: var(--shadow-color) 0px 3px 8px;
 }
 
 .item-image {
@@ -127,7 +126,15 @@ input {
    font-size: inherit;
    text-align: center;
 
+   border: 1px solid var(--border-color);
+   border-radius: 0.5em;
+
    max-width: 2em;
+}
+
+input:focus,
+input:active {
+   outline: 2px solid var(--border-color);
 }
 
 .total {
@@ -139,9 +146,8 @@ input {
    margin-bottom: 1em;
    padding: 1em;
 
-   border: none;
+   border: 1px solid var(--border-color);
    border-radius: 1em;
-   box-shadow: var(--shadow-color) 0px 3px 8px;
 }
 
 .total-label {

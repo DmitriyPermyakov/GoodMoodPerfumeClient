@@ -9,6 +9,8 @@ import { ProductComponent } from './product/product.component';
 import { EditProductComponent } from './edit-product/edit-product.component';
 import { ProductDetailsComponent } from './product-details/product-details.component';
 import { CartComponent } from './cart/cart.component';
+import { EnterContactsComponent } from './enter-contacts/enter-contacts.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -17,12 +19,14 @@ import { CartComponent } from './cart/cart.component';
     ProductComponent,
     EditProductComponent,
     ProductDetailsComponent,
-    CartComponent
+    CartComponent,
+    EnterContactsComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

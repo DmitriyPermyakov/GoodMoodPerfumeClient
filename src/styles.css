@@ -1,6 +1,7 @@
 :root {
    --border-color: #AA60C8;
    --shadow-color: #aa60c887;
+   --disabled-button: #bc94cc;
 }
 /* 
 html {
@@ -20,8 +21,46 @@ body {
 
    font-family: sans-serif;
 }
-/* 
-body {
-   overflow-y: scroll;
-   overflow-x: hidden;
-} */
+
+
+.cart-button {
+   border: none;
+    width: 65px;
+    aspect-ratio: 1 / 1;
+    border-radius: 3em;
+    background-color: var(--border-color);
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+}
+
+.cart-button svg {
+   width: 35px;
+    height: 35px;
+    position: absolute;
+    top: 22%;
+    left: 21%;
+}
+
+.cart-button svg * {
+   stroke: #edebeb;
+}
+
+.items-count {
+   display: flex   ;
+   align-items: center;
+   justify-content: center;
+   text-align: center;
+   margin: 0;
+   width: 1.5em;
+   height: 1.5em;
+   position: absolute;
+   top: -3%;
+   left: 61%;
+   font-size: inherit;
+   font-family: inherit;
+   color: #ffffff;
+   background-color: #d18bee;
+   border: 1px solid var(--border-color);
+   border-radius: 50%;
+}

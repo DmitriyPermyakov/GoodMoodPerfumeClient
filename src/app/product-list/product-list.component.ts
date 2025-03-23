@@ -1,26 +1,47 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { Product } from '../interfaces/app-interfaces';
 import { ProductService } from '../services/product.service';
 import { catchError, Subscription, throwError } from 'rxjs';
+import { CartService } from '../services/cart.service';
+import { TelegramService } from '../services/telegram.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-product-list',
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.css']
 })
-export class ProductListComponent implements OnInit {
+export class ProductListComponent implements OnInit, OnDestroy {
   public products: Product[] = []
 
+  private navigateToCart = () => this.router.navigate(['cart'])
   private activeFilter: string = "женские"
   private productSubscription: Subscription | null
 
-  constructor(private productService: ProductService) {}
+  constructor(private productService: ProductService,
+    private cartService: CartService,
+    private tgService: TelegramService,
+    private router: Router) {}
+
   public trackById(index: number, product: Product) {
     return product.id
   }
 
+
   ngOnInit(): void {
     this.loadProducts(this.activeFilter);
+    this.tgService.backButton.hide();
+    this.tgService.mainButton.onClick(this.navigateToCart)
+    this.tgService.mainButton.setParams({
+      text: 'Корзина'
+    })
+    if(!this.cartService.isCartEmpty()) {
+      this.tgService.mainButton.show()
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.tgService.mainButton.offClick(this.navigateToCart)
   }
 
   public isForWomen(): boolean {
