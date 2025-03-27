@@ -64,3 +64,94 @@ body {
    border: 1px solid var(--border-color);
    border-radius: 50%;
 }
+
+
+
+form {
+   display: flex;
+   flex-direction: column;
+   align-items: stretch;
+   justify-content: center;
+
+   max-width: 90%;
+   width: 80%;
+}
+
+.inputs {
+   font-size: inherit;
+   font-family: inherit;
+
+   border: 1px solid var(--border-color);
+   border-radius: 2em;
+}
+
+.select {
+   margin-bottom: 1em;
+   position: relative;
+}
+
+.select::after {
+   content: "";
+
+   position: absolute;
+   top: 33%;
+   right: 1.5em;
+
+   width: .7em;
+   height: .7em;
+
+   border-left: 3px solid;
+   border-bottom: 3px solid;
+   border-color: var(--shadow-color);
+   background-color: transparent;
+   transform: rotate(-45deg);
+}
+
+
+.select:has(select:open)::after {
+   transform: rotate(135deg);
+   top: 42%;
+}
+
+
+select.inputs {   
+   padding: 1em 1.3em;
+   width: 100%;
+
+   background-color: transparent;
+   appearance: none;
+}
+
+input::file-selector-button {
+   padding: 0.2em 0.5em;
+   background-color: transparent;
+   outline: none;
+   border: 1px solid var(--border-color);
+   border-radius: 1em;
+}
+
+input.inputs {
+   padding: 1em 1.3em;
+}
+
+textarea {
+   padding: 1em 1.3em;
+   margin-bottom: 1em;
+   min-height: 6em;
+   max-width: 100%;
+   border-radius: 1.5em;
+   resize: none;
+}
+
+.inputs + .inputs {
+   margin-top: 1em;
+}
+
+.inputs::placeholder {
+   color: var(--shadow-color);
+}
+
+.inputs:focus {
+   scale: 1.01;   
+   outline: none;
+}

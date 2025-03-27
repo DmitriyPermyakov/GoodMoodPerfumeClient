@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Product } from '../interfaces/app-interfaces';
+import { CreateProductDto, Product, Response } from '../interfaces/app-interfaces';
 import { Observable, of } from 'rxjs';
+
 
 @Injectable({
   providedIn: 'root'
@@ -84,5 +85,23 @@ export class ProductService {
 
   public getProductsByName(name: string) : Observable<Product[]> {
     return of(this.products.filter(p => p.name.toLocaleLowerCase().includes(name.toLocaleLowerCase())))
+  }
+
+  public createProduct(product: FormData): Observable<Response> {
+    let result: Product = {
+      id: 1,
+      category: product.get('category').toString(),
+      name: product.get('name').toString(),
+      description: product.get('description').toString(),
+      price: parseInt(product.get('price').toString()),
+      imageUrl: "https://unsplash.com/photos/n5-chanel-eau-de-parfum-spray-bottle-potCPE_Cw8A"
+    }
+    let response: Response = {
+      status: "ok",
+      isSuccessfull: true,
+      errors: [],
+      result: result
+    }
+    return of(response)
   }
 }

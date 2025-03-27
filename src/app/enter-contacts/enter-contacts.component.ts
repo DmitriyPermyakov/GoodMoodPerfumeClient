@@ -15,10 +15,9 @@ import { Response } from '../interfaces/app-interfaces';
   styleUrls: ['./enter-contacts.component.css']
 })
 export class EnterContactsComponent implements OnInit, OnDestroy {
-  public isSelectOpen: boolean = false
-  
-  private validSub: Subscription
-  private contactSub: Subscription
+
+  private formValidSub: Subscription
+  private formStatusSub: Subscription
   private validSubject: Subject<boolean> = new Subject()
 
   public contacts = new FormGroup({
@@ -34,14 +33,14 @@ export class EnterContactsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.contactSub = this.contacts.statusChanges.subscribe(v => {
+    this.formStatusSub = this.contacts.statusChanges.subscribe(v => {
       this.validSubject.next(this.contacts.valid)
     })
 
     this.tgService.disableMainButton()
     this.tgService.mainButton.onClick(this.submitCallback)
 
-    this.validSub = this.validSubject.subscribe(valid => {
+    this.formValidSub = this.validSubject.subscribe(valid => {
       if(valid)
           this.tgService.enableMainButton()        
       else 
@@ -50,17 +49,17 @@ export class EnterContactsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if(this.validSub)
-      this.validSub.unsubscribe()
+    if(this.formValidSub)
+      this.formValidSub.unsubscribe()
 
-    if(this.contactSub)
-      this.contactSub.unsubscribe()
+    if(this.formStatusSub)
+      this.formStatusSub.unsubscribe()
 
     this.tgService.mainButton.offClick(this.submitCallback)
   }
 
   submitCallback = () => this.submit()
-
+     
   submit(): void {
     let orderItemsRequest: OrderItemsRequest[] = []
 

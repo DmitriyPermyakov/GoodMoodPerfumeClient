@@ -8,6 +8,14 @@ export interface Product {
    imageUrl: string
  }
 
+export interface CreateProductDto {
+  name: string,
+  description: string,
+  price: number,
+  category: string,
+  image: File
+}
+
 export interface OrderItem {
   product: Product,
   quantity: number

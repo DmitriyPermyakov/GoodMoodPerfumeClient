@@ -29,6 +29,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
 
   ngOnInit(): void {
+    console.log(this.tgService.startParams)
     this.loadProducts(this.activeFilter);
     this.tgService.backButton.hide();
     this.tgService.mainButton.onClick(this.navigateToCart)

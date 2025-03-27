@@ -8,7 +8,11 @@ export class TelegramService {
   private document = inject(DOCUMENT);
   private _window;
   private _webapp;
+  private _startParams;
 
+  public get startParams() {
+    return this._startParams;
+  }
   public get webApp() {
     return this._webapp
   }
@@ -39,7 +43,9 @@ export class TelegramService {
 
   constructor() { 
     this._window = this.document.defaultView;
-    this._webapp = this._window.Telegram.WebApp;    
+    this._webapp = this._window.Telegram.WebApp; 
+    this._startParams = this._webapp.initDataUnsafe.start_param
+
     this.initWebApp();
   }
 

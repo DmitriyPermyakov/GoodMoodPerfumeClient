@@ -1,0 +1,2 @@
+<p *ngIf="message" [ngClass]="{'success': isSuccess == true, 'error': isSuccess == false }"
+   (animationend)="clearMessage()">{{ message }}</p>

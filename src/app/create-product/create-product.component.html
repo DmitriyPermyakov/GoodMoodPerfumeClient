@@ -1,0 +1,16 @@
+<div class="container">
+   <form [formGroup]="productForm">
+      <input type="file" class="inputs" accept="image/*" (change)="imageSelected($event)">
+      <input type="text" class="inputs" placeholder="Название" formControlName="name">
+      <textarea class="inputs" placeholder="Описание" formControlName="description"></textarea>
+      <div class="select">
+         <select class="inputs" formControlName="category">
+            <option value="Мужские">Мужские</option>
+            <option value="Женские">Женские</option>
+         </select>
+      </div>
+      <input type="number" class="inputs" placeholder="Цена" formControlName="price">
+
+   </form>
+   <button (click)="submit()">click</button>
+</div>

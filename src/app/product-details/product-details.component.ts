@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ProductService } from '../services/product.service';
 import { Product } from '../interfaces/app-interfaces';
 import { Subscription } from 'rxjs';
@@ -12,7 +12,8 @@ import { TelegramService } from '../services/telegram.service';
   styleUrls: ['./product-details.component.css']
 })
 export class ProductDetailsComponent implements OnInit, OnDestroy {
-  public product: Product | null
+
+  @Input() public product: Product | null
   private productSubscription: Subscription
   
   public itemsCount(): number {
@@ -32,8 +33,9 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     let id = this.activatedRoute.snapshot.paramMap.get("id")
-    this.productSubscription = this.productService.getProductById( parseInt(id))
-      .subscribe(p => this.product = p ?? null)
+    if(!this.product)      
+      this.productSubscription = this.productService.getProductById(parseInt(id))
+        .subscribe(p => this.product = p ?? null)
 
     this.tgService.mainButton.setParams({
       text: "Добавить в корзину"
