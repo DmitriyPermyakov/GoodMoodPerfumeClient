@@ -5,6 +5,7 @@ import { catchError, Subscription, throwError } from 'rxjs';
 import { CartService } from '../services/cart.service';
 import { TelegramService } from '../services/telegram.service';
 import { Router } from '@angular/router';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-product-list',
@@ -14,14 +15,16 @@ import { Router } from '@angular/router';
 export class ProductListComponent implements OnInit, OnDestroy {
   public products: Product[] = []
 
-  private navigateToCart = () => this.router.navigate(['cart'])
+  private navigateToCartCallback = () => this.router.navigate(['cart'])
+  private navigateToCreateCallback = () => this.router.navigate(['product', 'create'])
   private activeFilter: string = "женские"
   private productSubscription: Subscription | null
 
   constructor(private productService: ProductService,
     private cartService: CartService,
     private tgService: TelegramService,
-    private router: Router) {}
+    private router: Router,
+    private auth: AuthService) {}
 
   public trackById(index: number, product: Product) {
     return product.id
@@ -32,17 +35,30 @@ export class ProductListComponent implements OnInit, OnDestroy {
     console.log(this.tgService.startParams)
     this.loadProducts(this.activeFilter);
     this.tgService.backButton.hide();
-    this.tgService.mainButton.onClick(this.navigateToCart)
-    this.tgService.mainButton.setParams({
-      text: 'Корзина'
-    })
-    if(!this.cartService.isCartEmpty()) {
-      this.tgService.mainButton.show()
+
+    if(this.auth.isAuthenticated) {
+      this.tgService.mainButton.onClick(this.navigateToCreateCallback)
+      this.tgService.mainButton.setParams({
+        text: 'Добавить'
+      }) 
+      this.tgService.mainButton.show() 
     }
+    else {
+      this.tgService.mainButton.onClick(this.navigateToCartCallback)
+      this.tgService.mainButton.setParams({
+        text: 'Корзина'
+      })    
+      if(!this.cartService.isCartEmpty()) {
+        this.tgService.mainButton.show()
+      }
+    }    
   }
 
   ngOnDestroy(): void {
-    this.tgService.mainButton.offClick(this.navigateToCart)
+    if(this.auth.isAuthenticated)
+      this.tgService.mainButton.offClick(this.navigateToCreateCallback)
+    else
+      this.tgService.mainButton.offClick(this.navigateToCartCallback)
   }
 
   public isForWomen(): boolean {

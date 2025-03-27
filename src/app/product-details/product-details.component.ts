@@ -2,9 +2,10 @@ import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular
 import { ProductService } from '../services/product.service';
 import { Product } from '../interfaces/app-interfaces';
 import { Subscription } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CartService } from '../services/cart.service';
 import { TelegramService } from '../services/telegram.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-product-details',
@@ -22,7 +23,9 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
 
   
   constructor(private productService: ProductService, 
+    public auth: AuthService,
     private activatedRoute: ActivatedRoute,
+    private router: Router,
     private cartService: CartService,
     private tgService: TelegramService,
     private cdr: ChangeDetectorRef) {}
@@ -37,14 +40,25 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
       this.productSubscription = this.productService.getProductById(parseInt(id))
         .subscribe(p => this.product = p ?? null)
 
-    this.tgService.mainButton.setParams({
-      text: "Добавить в корзину"
-    })
+    if(this.auth.isAuthenticated) {
+      this.tgService.mainButton.setParams({
+        text: "Редактировать"
+      })
+      this.tgService.mainButton.onClick(this.navigateToEdit)
+    } else {
+      this.tgService.mainButton.setParams({
+        text: "Добавить в корзину"
+      })
+      this.tgService.mainButton.onClick(this.addToCartCallback)
+    }    
 
-    this.tgService.mainButton.onClick(this.addToCartCallback)
     this.tgService.mainButton.show()
     this.tgService.backButton.show()
 
+  }
+
+  navigateToEdit(): void {
+    this.router.navigate(['product', this.product.id, 'edit'])
   }
 
   addToCartCallback = () => this.addToCart()
@@ -57,7 +71,10 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     if(this.productSubscription)
       this.productSubscription.unsubscribe()
-    this.tgService.mainButton.offClick(this.addToCartCallback)
+    if(this.auth.isAuthenticated)
+      this.tgService.mainButton.of(this.navigateToEdit)
+    else 
+      this.tgService.mainButton.offClick(this.addToCartCallback)
   }
 
   
