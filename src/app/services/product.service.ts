@@ -7,7 +7,7 @@ import { Observable, of } from 'rxjs';
   providedIn: 'root'
 })
 export class ProductService {  
-  private products: Product[] = [
+  public products: Product[] = [
     {
       id: 1,
       name: "Loreal",
@@ -87,13 +87,31 @@ export class ProductService {
     return of(this.products.filter(p => p.name.toLocaleLowerCase().includes(name.toLocaleLowerCase())))
   }
 
-  public createProduct(product: FormData): Observable<Response> {
+  public updateProduct(formData: FormData): Observable<Response> {
     let result: Product = {
       id: 1,
-      category: product.get('category').toString(),
-      name: product.get('name').toString(),
-      description: product.get('description').toString(),
-      price: parseInt(product.get('price').toString()),
+      category: formData.get('category').toString(),
+      name: formData.get('name').toString(),
+      description: formData.get('description').toString(),
+      price: parseInt(formData.get('price').toString()),
+      imageUrl: "https://unsplash.com/photos/n5-chanel-eau-de-parfum-spray-bottle-potCPE_Cw8A"
+    }
+    let response: Response = {
+      status: "ok",
+      isSuccessfull: true,
+      errors: [],
+      result: result
+    }
+    return of(response)
+  }
+
+  public createProduct(formData: FormData): Observable<Response> {
+    let result: Product = {
+      id: 1,
+      category: formData.get('category').toString(),
+      name: formData.get('name').toString(),
+      description: formData.get('description').toString(),
+      price: parseInt(formData.get('price').toString()),
       imageUrl: "https://unsplash.com/photos/n5-chanel-eau-de-parfum-spray-bottle-potCPE_Cw8A"
     }
     let response: Response = {

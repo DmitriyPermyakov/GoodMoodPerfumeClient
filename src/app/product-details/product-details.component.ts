@@ -36,6 +36,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     let id = this.activatedRoute.snapshot.paramMap.get("id")
+    
     if(!this.product)      
       this.productSubscription = this.productService.getProductById(parseInt(id))
         .subscribe(p => this.product = p ?? null)
@@ -44,7 +45,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
       this.tgService.mainButton.setParams({
         text: "Редактировать"
       })
-      this.tgService.mainButton.onClick(this.navigateToEdit)
+      this.tgService.mainButton.onClick(this.navigateToEditCallback)
     } else {
       this.tgService.mainButton.setParams({
         text: "Добавить в корзину"
@@ -57,6 +58,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
 
   }
 
+  navigateToEditCallback = () => this.navigateToEdit()
   navigateToEdit(): void {
     this.router.navigate(['product', this.product.id, 'edit'])
   }
@@ -72,7 +74,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
     if(this.productSubscription)
       this.productSubscription.unsubscribe()
     if(this.auth.isAuthenticated)
-      this.tgService.mainButton.of(this.navigateToEdit)
+      this.tgService.mainButton.offClick(this.navigateToEditCallback)
     else 
       this.tgService.mainButton.offClick(this.addToCartCallback)
   }

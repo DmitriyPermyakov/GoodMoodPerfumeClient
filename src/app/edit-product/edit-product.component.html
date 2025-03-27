@@ -1,1 +1,24 @@
-<p>edit-product works!</p>
+<div class="container" *ngIf="product">
+   <div class="image">
+      <img [src]="imageUrl ?? emptyImage">
+      <button class="remove-image" *ngIf="isVisible" (click)="removeImage()">
+         <svg width="23" height="23" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2.48438 19.4846L19.4549 2.51406" stroke="#A2A2A2" stroke-width="2" stroke-linecap="round" />
+            <path d="M2.48535 2.51465L19.4559 19.4852" stroke="#A2A2A2" stroke-width="2" stroke-linecap="round" />
+         </svg>
+      </button>
+   </div>
+   <form [formGroup]="productForm">
+      <input type="file" class="inputs" accept="image/*" (change)="imageSelected($event)">
+      <input type="text" class="inputs" placeholder="Название" formControlName="name">
+      <textarea class="inputs" placeholder="Описание" formControlName="description"></textarea>
+      <div class="select">
+         <select class="inputs" formControlName="category">
+            <option value="мужские">Мужские</option>
+            <option value="женские">Женские</option>
+         </select>
+      </div>
+      <input type="number" class="inputs" placeholder="Цена" formControlName="price">
+   </form>
+   <button (click)="submit()">click</button>
+</div>
