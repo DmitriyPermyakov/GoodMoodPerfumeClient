@@ -6,7 +6,7 @@
          </path>
       </svg>
    </div>
-   <input type="text" maxlength="255" #searchField (input)="search(searchField)">
+   <input type="text" maxlength="255" [formControl]="search">
 </div>
 <div class="categories">
    <button class="category" [class.active]="isForWomen()" (click)="filter($event)">Женские</button>

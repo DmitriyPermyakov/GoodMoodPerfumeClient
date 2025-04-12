@@ -9,12 +9,25 @@ export class TelegramService {
   private _window;
   private _webapp;
   private _startParams;
+  private _client;
 
   public get startParams() {
     return this._startParams;
   }
   public get webApp() {
     return this._webapp
+  }
+
+  public get userId(): number {
+    return this.webApp.initDataUnsafe.user.id
+  }
+
+  public get queryId(): string {
+    return this.webApp.initDataUnsafe.query_id;
+  }
+
+  public get client(): string {
+    return this._client;
   }
 
   public get mainButton() {
@@ -43,8 +56,13 @@ export class TelegramService {
 
   constructor() { 
     this._window = this.document.defaultView;
-    this._webapp = this._window.Telegram.WebApp; 
-    this._startParams = this._webapp.initDataUnsafe.start_param
+    this._webapp = this._window.Telegram.WebApp;
+    
+    this._client = this._window.Telegram.WebView.initParams.tgWebAppPlatform;
+
+    const urlParams = new URLSearchParams(window.location.search)
+    this._startParams = urlParams.get('start_param');
+    console.log(this._window.Telegram)
 
     this.initWebApp();
   }

@@ -6,8 +6,9 @@ import { catchError, Subject, Subscription, throwError } from 'rxjs';
 import { TelegramService } from '../services/telegram.service';
 import { CartService } from '../services/cart.service';
 import { OrderService } from '../services/order.service';
-import { OrderItemsRequest, OrderRequest } from '../interfaces/app-interfaces';
+import { CreateOrderItemDTO, OrderContacts, OrderRequest } from '../interfaces/app-interfaces';
 import { Response } from '../interfaces/app-interfaces';
+import { MessageService } from '../services/message.service';
 
 @Component({
   selector: 'app-enter-contacts',
@@ -18,6 +19,7 @@ export class EnterContactsComponent implements OnInit, OnDestroy {
 
   private formValidSub: Subscription
   private formStatusSub: Subscription
+  private contactsSub: Subscription
   private validSubject: Subject<boolean> = new Subject()
 
   public contacts = new FormGroup({
@@ -29,10 +31,22 @@ export class EnterContactsComponent implements OnInit, OnDestroy {
 
   constructor(private tgService: TelegramService,
     private cartService: CartService,
-    private orderService: OrderService
+    private orderService: OrderService,
+    private messageService: MessageService,
   ) {}
 
   ngOnInit(): void {
+    this. contactsSub = this.orderService.getOrderContacts(this.tgService.userId)
+      .pipe(
+        catchError(e => {
+          console.log("Контакты не найдены")
+          return throwError(() => e)
+        })
+      )
+      .subscribe(r => {
+        if(r.result)
+          this.contacts.patchValue(r.result as OrderContacts)
+      })
     this.formStatusSub = this.contacts.statusChanges.subscribe(v => {
       this.validSubject.next(this.contacts.valid)
     })
@@ -49,6 +63,8 @@ export class EnterContactsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    if(this.contactsSub)
+      this.contactsSub.unsubscribe()
     if(this.formValidSub)
       this.formValidSub.unsubscribe()
 
@@ -61,7 +77,7 @@ export class EnterContactsComponent implements OnInit, OnDestroy {
   submitCallback = () => this.submit()
      
   submit(): void {
-    let orderItemsRequest: OrderItemsRequest[] = []
+    let orderItemsRequest: CreateOrderItemDTO[] = []
 
     this.cartService.getOrderItems().forEach(i => {
       orderItemsRequest.push({
@@ -83,11 +99,10 @@ export class EnterContactsComponent implements OnInit, OnDestroy {
     this.orderService.createOrder(orderRequest)
       .pipe(
         catchError(e => {
-          alert(e.message)
+          this.messageService.showMessage(false, "Не удалось сделать заказ")
           return throwError(() => e )
         })
       ).subscribe((response: Response) => {
-        console.log(response)
         this.tgService.webApp.showPopup(
           {
             title: 'Поздравляем!!!',

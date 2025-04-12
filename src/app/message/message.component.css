@@ -1,3 +1,16 @@
+
+:host {
+   display: block;
+   width: 100%;
+   height: 5em;
+
+   position: absolute;
+   top: 0;
+   left: 0;
+
+   overflow: hidden;
+}
+
 p {
    padding: 1em;
    width: 15em;
@@ -6,47 +19,42 @@ p {
 
    border-radius: 0.5em;
    position: absolute;
-   top: 0;
-   left: 100%;
-   /* visibility: hidden; */
+   top: var(--tg-content-safe-area-inset-top);
+   left: 100vw;
+   z-index: 10;
 }
 
 .success {
+   display: block;
    color: #065f46;
    background-color: #D1FAE5;
-   animation: messageIn 2s ease-in-out 100ms 1 normal none;
+   animation: messageIn 2s ease-in-out 100ms 1 normal forwards;
 
 }
 
 .error {
+   display: inline;
    color: #991b1b;
    background-color: #fee2e2;
-   animation: messageIn 2s ease-in-out 100ms 1 normal none;
+   animation: messageIn 2s ease-in-out 100ms 1 normal forwards;
 
 }
 
 
 @keyframes messageIn {
    0% {
-      /* visibility: visible; */
-      transform: translate(100%, 0%);
+      opacity: 0;
+      transform: translateX(100vw);
    }
 
-   20% {
-      transform: translate(-120%, 0%);
-   }
-
-   50% {
-      transform: translate(-120%, 0%);
-   }
-
-   80% {
-      transform: translate(-120%, 0%);
-   }
+   20%, 50%, 80% {
+      opacity: 1;
+      transform: translateX(calc(-50vw - 50%));
+   }   
    
    100% {
-      /* visibility: hidden; */
-      transform: translate(100%, 0%);      
+      opacity: 0;
+      transform: translateX(100vw);  
    }
    
 }

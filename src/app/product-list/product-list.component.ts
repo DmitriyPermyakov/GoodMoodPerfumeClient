@@ -1,11 +1,13 @@
 import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { Product } from '../interfaces/app-interfaces';
 import { ProductService } from '../services/product.service';
-import { catchError, Subscription, throwError } from 'rxjs';
+import { catchError, debounceTime, distinctUntilChanged, Subscription, switchMap, throwError } from 'rxjs';
 import { CartService } from '../services/cart.service';
 import { TelegramService } from '../services/telegram.service';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
+import { MessageService } from '../services/message.service';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-product-list',
@@ -14,17 +16,23 @@ import { AuthService } from '../services/auth.service';
 })
 export class ProductListComponent implements OnInit, OnDestroy {
   public products: Product[] = []
+  public search: FormControl = new FormControl('')
 
   private navigateToCartCallback = () => this.router.navigate(['cart'])
   private navigateToCreateCallback = () => this.router.navigate(['product', 'create'])
   private activeFilter: string = "женские"
   private productSubscription: Subscription | null
+  private searchSub: Subscription
+  private isAuth: boolean = false
 
   constructor(private productService: ProductService,
     private cartService: CartService,
     private tgService: TelegramService,
+    private messageService: MessageService,
     private router: Router,
-    private auth: AuthService) {}
+    private auth: AuthService) {
+      this.isAuth = auth.isTokenValid()
+    }
 
   public trackById(index: number, product: Product) {
     return product.id
@@ -35,7 +43,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
     this.loadProducts(this.activeFilter);
     this.tgService.backButton.hide();
 
-    if(this.auth.isAuthenticated) {
+    if(this.isAuth) {
       this.tgService.mainButton.onClick(this.navigateToCreateCallback)
       this.tgService.mainButton.setParams({
         text: 'Добавить'
@@ -51,10 +59,13 @@ export class ProductListComponent implements OnInit, OnDestroy {
         this.tgService.mainButton.show()
       }
     }    
+
+    this.setSearch()
+
   }
 
   ngOnDestroy(): void {
-    if(this.auth.isAuthenticated)
+    if(this.isAuth)
       this.tgService.mainButton.offClick(this.navigateToCreateCallback)
     else
       this.tgService.mainButton.offClick(this.navigateToCartCallback)
@@ -66,15 +77,24 @@ export class ProductListComponent implements OnInit, OnDestroy {
     else return false
   }
 
-  public search(input: HTMLInputElement): void {
-     this.productService.getProductsByName(input.value)
-      .subscribe(p => this.products = p);
-  }
-  
   public filter(event: Event): void {
     this.activeFilter = (event.target as HTMLElement).textContent.toLocaleLowerCase();  
     
     this.loadProducts(this.activeFilter)
+  }
+
+  private setSearch(): void {
+    this.searchSub = this.search.valueChanges
+      .pipe(
+        debounceTime(500),
+        distinctUntilChanged(),
+        switchMap(value => {
+          let name = (value as string).trim().toLowerCase()
+           return this.productService.getProductsByName(name)
+        })
+      ).subscribe(r => {
+        this.products = r.result as Product[]
+      })
   }
 
   private loadProducts(category: string):void {
@@ -84,11 +104,15 @@ export class ProductListComponent implements OnInit, OnDestroy {
     this.productSubscription = this.productService.getFilteredProducts(category)
       .pipe(
         catchError(e => {
-          alert("Cant get products" + e.message)
+          this.messageService.showMessage(false, "Ошибка загрузки")
           return throwError(() => e)
         })
       )
-      .subscribe(p => this.products = p.filter(p => p.category == this.activeFilter))
+      .subscribe(r => {
+        if(r.result){
+          this.products = r.result as Product[]
+        }
+      })
 
   }
 }

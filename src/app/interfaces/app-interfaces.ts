@@ -21,7 +21,7 @@ export interface OrderItem {
   quantity: number
 }
 
-export interface OrderItemsRequest {
+export interface CreateOrderItemDTO {
   productId: number,
   quantity: number
 }
@@ -29,7 +29,7 @@ export interface OrderItemsRequest {
 export interface OrderRequest {
   queryId: string,
   telegramUserId: number,
-  orderItems: OrderItemsRequest[]
+  orderItems: CreateOrderItemDTO[]
   address: string,
   name: string,
   phone: string,
@@ -43,3 +43,16 @@ export interface Response {
   result: object
 }
 
+export interface JwtPayload {
+  "role": string,
+  "nbf": number,
+  "exp": number,
+  "iat": number
+}
+
+export interface OrderContacts {
+  address: string,
+  name: string,
+  phone: string,
+  delivery: string
+}

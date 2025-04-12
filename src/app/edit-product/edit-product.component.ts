@@ -44,9 +44,9 @@ export class EditProductComponent implements OnInit, OnDestroy {
           this.messageService.showMessage(false, 'Ошибка загрузки')
           return throwError(() => e)
         })).subscribe(p => {
-        this.product = p
+        this.product = p.result as Product
         if(this.product) {
-          this.imageUrl = p.imageUrl
+          this.imageUrl = (p.result as Product).imageUrl
           this.productForm = new FormGroup({
             name: new FormControl(this.product.name, Validators.required),
             description: new FormControl(this.product.description),
@@ -56,7 +56,6 @@ export class EditProductComponent implements OnInit, OnDestroy {
             imageUrl: new FormControl(this.product.imageUrl)
           }, { validators: imageValidator})
 
-          console.log("product form valid", this.productForm.valid)
 
           this.formStatusSub = this.productForm.statusChanges.subscribe(status => {
               this.formValidSubject.next(this.productForm.valid)
@@ -86,8 +85,6 @@ export class EditProductComponent implements OnInit, OnDestroy {
     this.imageUrl = this.emptyImage
     this.productForm.patchValue({imageUrl: '' })
     this.isVisible = false
-    console.log("product form valid", this.productForm.valid)
-
   }
 
   ngOnDestroy(): void {

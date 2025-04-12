@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ProductService } from '../services/product.service';
 import { TelegramService } from '../services/telegram.service';
-import { catchError, Subject, Subscription, throwError } from 'rxjs';
+import { catchError, map, Subject, Subscription, throwError } from 'rxjs';
 import { Router } from '@angular/router';
 
 import { Product } from '../interfaces/app-interfaces';
@@ -15,6 +15,7 @@ import { MessageService } from '../services/message.service';
 })
 export class CreateProductComponent implements OnInit, OnDestroy {
 
+  private createProductSub: Subscription
   private formStatusSub: Subscription
   private formValidSub: Subscription
   private formValidSubject: Subject<boolean> = new Subject()
@@ -58,6 +59,9 @@ export class CreateProductComponent implements OnInit, OnDestroy {
     if(this.formValidSub)
       this.formValidSub.unsubscribe()
 
+    if(this.createProductSub)
+      this.createProductSub.unsubscribe()
+
     this.tgService.mainButton.offClick(this.submitCallback)
   }
 
@@ -81,15 +85,15 @@ export class CreateProductComponent implements OnInit, OnDestroy {
     formData.append('price', this.productForm.controls['price'].value)
 
 
-    this.productService.createProduct(formData)
-      .pipe(
+    this.createProductSub = this.productService.createProduct(formData)
+      .pipe(        
         catchError(e => {
           this.messageService.showMessage(false, "Не удалось создать продукт")
           return throwError(() => e)
         })
       )
-      .subscribe(p => {
-        console.log(p)
+      .subscribe(p => {        
+        this.messageService.showMessage(true,"Продукт успешно создан")
         this.router.navigate(['product', (p.result as Product).id])
       })
   }

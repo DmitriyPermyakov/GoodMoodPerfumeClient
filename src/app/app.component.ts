@@ -10,20 +10,22 @@ import { Location } from '@angular/common';
 })
 export class AppComponent implements OnInit {
   title = 'GoodMoodPerfumeFront';
+  isDesktop: boolean = false
 
-  constructor(private location: Location, private tgService: TelegramService) {
-    
-  }
+  constructor(private location: Location, 
+    private tgService: TelegramService,
+  ) {  }
 
   ngOnInit(): void {
+    if(this.tgService.client === 'tdesktop')
+      this.isDesktop = true
     this.tgService.backButton.onClick(() => { 
       if(window.history.length > 1) {
         this.location.back()
       }      
     })
 
-    this.tgService.backButton.hide();
-    
+    this.tgService.backButton.hide();   
    
   }
 

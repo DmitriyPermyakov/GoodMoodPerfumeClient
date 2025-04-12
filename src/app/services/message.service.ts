@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -10,10 +10,10 @@ export class MessageService {
 
   constructor() { }
 
-  public showMessage(isSuccess: boolean, message: string): void {
-    this.messageSubject.next({ isSuccess, message: message })
+  public showMessage(isSuccess: boolean, message: string): void {    
+    this.messageSubject.next({ isSuccess, message: message });    
   }
-
+  
   clearMessage(): void {
     this.messageSubject.next({ isSuccess: false, message: '' })
   }
